@@ -41,7 +41,7 @@ CATEGORIES = [
     ("숏츠", "shorts"),
 ]
 CAT_SLUG = dict(CATEGORIES)
-GENERATED = ["posts", "category", "tag", "index.html", "feed.xml", "404.html"]
+GENERATED = ["posts", "category", "tag", "index.html", "feed.xml", "404.html", "sitemap.xml", "robots.txt"]
 
 
 def yt_id(v):
@@ -197,6 +197,10 @@ def main():
         sel = [p for p in posts if t in map(str, p["tags"])]
         write(f"tag/{t}/index.html", page(f"#{t}", listing(sel, f"#{t}")))
     write("feed.xml", feed(posts))
+    urls = ["/"] + [f"/category/{s}/" for _, s in CATEGORIES] + [p["url"] for p in posts]
+    write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+          + "".join(f"<url><loc>{SITE['url']}{u}</loc></url>" for u in urls) + "</urlset>")
+    write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE['url']}/sitemap.xml\n")
     write("404.html", page("페이지를 찾을 수 없어요",
                            '<div class="empty"><h1>404</h1><p>페이지를 찾을 수 없어요.</p><p><a href="/">처음으로</a></p></div>'))
     print(f"글 {len(posts)}개, 태그 {len(tags)}개 생성 완료")
