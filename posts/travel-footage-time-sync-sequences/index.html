@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기 · 강PD 로그</title>
+<meta name="description" content="시계가 제각각인 카메라 영상 905개를 GPS와 사진으로 실제 촬영 시각에 맞추고, 카메라별 트랙으로 나뉜 프리미어 날짜별 시퀀스를 자동으로 만들었다.">
+<meta name="naver-site-verification" content="08126fe2f9fece07e9a7d4ce506ffe5ac34effa9">
+<meta name="google-site-verification" content="DGgQ1KaoMWEGQy5mMYvWlhL2FhlGd11kbwJkMVg-3lE">
+<meta property="og:title" content="카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기 · 강PD 로그">
+<meta property="og:description" content="시계가 제각각인 카메라 영상 905개를 GPS와 사진으로 실제 촬영 시각에 맞추고, 카메라별 트랙으로 나뉜 프리미어 날짜별 시퀀스를 자동으로 만들었다.">
+
+<link rel="alternate" type="application/rss+xml" title="강PD 로그" href="/feed.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23c2410c'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>강</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">강</span>강PD 로그</a>
+    <nav class="cats"><a href="/">전체</a><a href="/category/work/" class="on">작업기록</a><a href="/category/thoughts/">생각</a><a href="/category/daily/">일상</a><a href="/category/shorts/">숏츠</a><a href="/series/">시리즈</a></nav>
+  </div>
+</header>
+<main class="wrap">
+<article class="post"><header><a class="cat c-work" href="/category/work/">작업기록</a><h1>카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기</h1><time>2026. 10. 18.</time></header><aside class="series-box"><a class="series-name" href="/series/video-archive-ai/">시리즈 · 개인 영상 아카이브와 AI</a><ol><li><span>1부</span><a href="/posts/travel-footage-ai-backup/">여행 영상 백업, AI에게 밤새 맡기고 아침에 검증 보고 받기</a></li><li class="now"><span>2부</span>카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기</li><li><span>3부</span><a href="/posts/premiere-mcp-setup/">AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기</a></li><li><span>4부</span><a href="/posts/travel-footage-captions-efficiency/">62시간 여행 영상 자막 만들기와 AI 작업 효율</a></li><li class="soon"><span>5부</span>언제 편집할지 몰라도 찍어둔 영상들의 앞날 <em>준비 중</em></li><li class="soon"><span>6부</span>혼자 감당 못 하던 작업량, AI가 바꾼 아카이브의 가치 <em>준비 중</em></li><li class="soon"><span>7부</span>저장장치의 가치는 더 올라간다 <em>준비 중</em></li></ol></aside><div class="prose"><p>시계가 제각각인 카메라 영상 905개를 GPS와 사진으로 실제 촬영 시각에 맞추고,
+<strong>카메라별 트랙으로 나뉜 프리미어 날짜별 시퀀스를 자동으로 만들었다.</strong></p>
+<p>1부에서 영상을 한 하드로 모았다. 이번엔 그걸 편집할 수 있는 상태로 늘어놓는 단계다.
+카메라는 오즈모 나노, 고프로, 캐논 100D, 캐논 G7X(아내 카메라), 그리고 휴대폰까지 다섯 종류였다.</p>
+<h2 id="_1">촬영 시각 맞추기: 카메라마다 시계가 다 달랐다</h2>
+<p>편집하려면 여러 대의 영상을 실제 찍은 순서대로 놓아야 한다.
+그런데 카메라마다 시계 기준이 달랐다. 현지는 한국보다 6시간 늦은 UTC+3이다.</p>
+<p>AI가 905개 파일의 촬영 시각을 전부 뽑아서 카메라별로 따져봤다.</p>
+<table>
+<thead>
+<tr>
+<th>카메라</th>
+<th>시계 상태</th>
+<th>맞춘 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오즈모 (412개)</td>
+<td>파일명에 한국 시간이 그대로 찍힘</td>
+<td>파일명 시각에서 9시간 빼서 세계 표준시로, 다시 3시간 더해 현지 시각</td>
+</tr>
+<tr>
+<td>고프로 (215개)</td>
+<td>엉망</td>
+<td>아래에 따로</td>
+</tr>
+<tr>
+<td>캐논 100D·G7X (276개)</td>
+<td>현지 시간이 아님</td>
+<td>처음엔 세계 표준시로 잘못 가정, 다음 대화에서 한국 시간으로 확정</td>
+</tr>
+<tr>
+<td>기타 (2개)</td>
+<td>따로 분류된 파일</td>
+<td>따로 트랙</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">고프로</h3>
+<p>고프로는 켤 때마다 시간을 설정하라고 해서, 귀찮아서 대충 넣고 찍은 게 꽤 있다. 2016년 같은 엉뚱한 해로 넣은 것도 있을 거다.
+그래서 파일에 적힌 시각은 믿을 수가 없었다.</p>
+<p>AI가 찾은 실마리는 고프로가 영상 안에 같이 기록하는 GPS 데이터였다. GPS에는 위성에서 받은 정확한 시각이 들어 있다.
+GPS가 잡힌 파일은 그 시각을 그대로 쓰고, 안 잡힌 파일은 시계가 일정하게 틀어져 있다는 점을 이용했다.
+같은 시계 설정으로 찍힌 파일 번호 구간을 찾아서, 구간마다 얼마나 틀어졌는지 계산해 한꺼번에 되돌렸다.</p>
+<table>
+<thead>
+<tr>
+<th>파일 번호 구간</th>
+<th>시계가 틀어진 정도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0418~0433</td>
+<td>거의 정확</td>
+</tr>
+<tr>
+<td>0434~0460</td>
+<td>약 하루</td>
+</tr>
+<tr>
+<td>0461~0479</td>
+<td>약 3시간 20분, 반대 방향</td>
+</tr>
+<tr>
+<td>0482~0636</td>
+<td>약 153일</td>
+</tr>
+<tr>
+<td>0637~0640</td>
+<td>약 163일</td>
+</tr>
+</tbody>
+</table>
+<p>이렇게 215개 중 214개를 복구했다. 나머지 하나(GX010479)는 이름에 「시각추정」을 붙여 표시해뒀다.
+오즈모와 동시에 찍은 구간은 소리 파형을 비교해서 확인했는데, 10~20초 안쪽으로 맞았다.</p>
+<h3 id="_3">캐논</h3>
+<p>캐논은 처음에 한국 시간이라고 봤다가, 다음엔 현지 시간이라고 가정하고 소리 비교를 두 번 돌렸는데 둘 다 헛수고였다.
+결국 사진 한 장으로 풀렸다. 같은 시각에 오즈모는 낮인데 캐논은 저녁 먹는 장면이었다.
+현지 시간이 아니라는 건 확실해졌고, 세계 표준시일 가능성이 커서 일단 +3시간으로 넣었다.
+이건 다음 대화에서 뒤집혔다. 카메라 시계로 저녁 8~10시에 찍힌 사진이 전부 한낮 사파리 장면(얼룩말, 사자, 코끼리)이었고, 9시간을 당겼을 때 고프로 GPS·오즈모와 가장 많이 겹쳤다. 100D와 G7X 모두 <strong>한국 시간</strong>이었다. 단, G7X 영상(MP4)은 원래 기록이 맞아서 보정하지 않았다.</p>
+<h2 id="_4">프리미어 날짜별 시퀀스</h2>
+<p>시각이 정리되니 나머지는 규칙대로 놓기만 하면 됐다.
+AI가 스크립트로 프리미어용 시퀀스 파일(XML)을 만들고, 프리미어에서 불러왔다.
+먼저 DAY 1 하나로 시험해보고, 방식을 확인한 다음 전체를 한 번에 만들었다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>규칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시퀀스</td>
+<td>날짜별 16개, 4K 29.97fps</td>
+</tr>
+<tr>
+<td>하루 기준</td>
+<td>새벽 4시. 자정 넘어 찍은 건 전날로</td>
+</tr>
+<tr>
+<td>트랙</td>
+<td>V1 오즈모, V2 고프로, V3 캐논, V4 기타. 오디오는 카메라당 2트랙</td>
+</tr>
+<tr>
+<td>동시 촬영</td>
+<td>같은 지점에 위아래로 겹쳐서 배치</td>
+</tr>
+<tr>
+<td>장면 사이</td>
+<td>2초 간격으로 압축</td>
+</tr>
+<tr>
+<td>마커</td>
+<td>장면마다 현지 시각</td>
+</tr>
+<tr>
+<td>클립 이름</td>
+<td>끝에 [날짜 시각]</td>
+</tr>
+<tr>
+<td>크기</td>
+<td>2.7K 클립은 4K에 맞게 확대</td>
+</tr>
+<tr>
+<td>뺀 것</td>
+<td>동기화 임시 파일, 썸네일·프록시 파일, 0.5초 미만, 같은 파일 중복</td>
+</tr>
+</tbody>
+</table>
+<p>날짜별로 보면 이렇다.</p>
+<table>
+<thead>
+<tr>
+<th>날짜</th>
+<th>클립</th>
+<th>카메라 구성</th>
+<th>길이</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9/24</td>
+<td>4</td>
+<td>오즈모</td>
+<td>2분</td>
+</tr>
+<tr>
+<td>9/25</td>
+<td>54</td>
+<td>오즈모 41, 고프로 13</td>
+<td>158분</td>
+</tr>
+<tr>
+<td>9/26</td>
+<td>130</td>
+<td>캐논 68, 오즈모 36, 고프로 26</td>
+<td>232분</td>
+</tr>
+<tr>
+<td>9/27</td>
+<td>182</td>
+<td>캐논 96, 오즈모 66, 고프로 20</td>
+<td>380분</td>
+</tr>
+<tr>
+<td>9/28</td>
+<td>42</td>
+<td>캐논 33, 고프로 6, 오즈모 2, 기타 1</td>
+<td>91분</td>
+</tr>
+<tr>
+<td>9/29</td>
+<td>154</td>
+<td>캐논 75, 오즈모 44, 고프로 35</td>
+<td>454분</td>
+</tr>
+<tr>
+<td>9/30</td>
+<td>2</td>
+<td>고프로</td>
+<td>2분</td>
+</tr>
+<tr>
+<td>10/1</td>
+<td>37</td>
+<td>오즈모 21, 고프로 16</td>
+<td>387분</td>
+</tr>
+<tr>
+<td>10/2</td>
+<td>51</td>
+<td>오즈모 36, 고프로 15</td>
+<td>367분</td>
+</tr>
+<tr>
+<td>10/3</td>
+<td>62</td>
+<td>오즈모 47, 고프로 15</td>
+<td>281분</td>
+</tr>
+<tr>
+<td>10/4</td>
+<td>41</td>
+<td>오즈모 31, 고프로 10</td>
+<td>310분</td>
+</tr>
+<tr>
+<td>10/5</td>
+<td>30</td>
+<td>고프로 23, 오즈모 7</td>
+<td>322분</td>
+</tr>
+<tr>
+<td>10/6</td>
+<td>38</td>
+<td>고프로 27, 오즈모 11</td>
+<td>129분</td>
+</tr>
+<tr>
+<td>10/7</td>
+<td>20</td>
+<td>오즈모</td>
+<td>244분</td>
+</tr>
+<tr>
+<td>10/8</td>
+<td>13</td>
+<td>오즈모 9, 고프로 4</td>
+<td>198분</td>
+</tr>
+<tr>
+<td>10/9</td>
+<td>15</td>
+<td>오즈모 13, 고프로 2</td>
+<td>119분</td>
+</tr>
+</tbody>
+</table>
+<p>9/29 하루만 450분이 넘는다.
+이걸 하나하나 열어서 카메라별로 늘어놓고 시간 맞추는 게 원래 편집에서 제일 하기 싫은 부분인데, 그게 통째로 빠졌다.
+불러오기가 끝나니 프리미어가 알아서 미디어 분석도 돌리기 시작했다.</p>
+<p>작업 파일은 따로 남겨뒀다. 다음에 영상이 추가되면 이것만 다시 돌리면 된다.</p>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clip_times_fixed.csv</td>
+<td>905개 클립의 보정된 촬영 시각</td>
+</tr>
+<tr>
+<td>make_all.py</td>
+<td>날짜별 시퀀스를 만드는 스크립트. 캐논 시간을 고칠 때 이걸 다시 돌림</td>
+</tr>
+<tr>
+<td>인수인계.md</td>
+<td>위치, 카메라별 보정값, 남은 일, 작업 요령</td>
+</tr>
+</tbody>
+</table>
+<h2 id="v2">다음 대화에서 다시 만든 v2 시퀀스</h2>
+<p>캐논 시간이 확정된 뒤, 새 대화에서 시퀀스를 다시 만들었다.</p>
+<table>
+<thead>
+<tr>
+<th>작업</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>캐논 시간</td>
+<td>100D·G7X 한국 시간으로 확정, 보정</td>
+</tr>
+<tr>
+<td>사진 트랙</td>
+<td>사진 778장(100D 678, G7X 73, 고프로 15, 오즈모 12)을 3초 컷으로 사진 트랙에. RAW(CR2)만 있는 343장은 프리미어가 못 읽어서 일단 제외하고 목록만 저장</td>
+</tr>
+<tr>
+<td>v2 시퀀스</td>
+<td>사진까지 넣어 날짜별 17개로 다시 만듦. 출국 날 아침 한국에서 찍은 사진 5장이 0923 시퀀스로 하나 더 생김</td>
+</tr>
+<tr>
+<td>새 촬영본</td>
+<td>백업 안 됐던 G7X·100D 촬영본과 휴대폰 영상까지 407개를 새 트랙에 배치. 기존 트랙 배치와 이미 뽑은 MP3를 건드리지 않으려고</td>
+</tr>
+<tr>
+<td>빠진 파일 찾기</td>
+<td>카메라 파일 번호의 빈 구간으로 추적. 100D 4293~4532번 240개가 딱 DAY 4 분량이라 노트북 자료에 있을 것으로 판단</td>
+</tr>
+</tbody>
+</table>
+<p>다음 글에서는 AI가 프리미어를 직접 조작하게 해준 연결, 프리미어 MCP를 정리한다.</p></div><aside class="series-box"><a class="series-name" href="/series/video-archive-ai/">시리즈 · 개인 영상 아카이브와 AI</a><ol><li><span>1부</span><a href="/posts/travel-footage-ai-backup/">여행 영상 백업, AI에게 밤새 맡기고 아침에 검증 보고 받기</a></li><li class="now"><span>2부</span>카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기</li><li><span>3부</span><a href="/posts/premiere-mcp-setup/">AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기</a></li><li><span>4부</span><a href="/posts/travel-footage-captions-efficiency/">62시간 여행 영상 자막 만들기와 AI 작업 효율</a></li><li class="soon"><span>5부</span>언제 편집할지 몰라도 찍어둔 영상들의 앞날 <em>준비 중</em></li><li class="soon"><span>6부</span>혼자 감당 못 하던 작업량, AI가 바꾼 아카이브의 가치 <em>준비 중</em></li><li class="soon"><span>7부</span>저장장치의 가치는 더 올라간다 <em>준비 중</em></li></ol></aside><footer><a class="tag" href="/tag/AI/">#AI</a><a class="tag" href="/tag/프리미어/">#프리미어</a><a class="tag" href="/tag/편집/">#편집</a><a class="tag" href="/tag/아카이빙/">#아카이빙</a></footer></article><nav class="pager"><a href="/posts/hello/"><span>다음 글</span>블로그를 열며</a><a href="/posts/travel-footage-ai-backup/" class="r"><span>이전 글</span>여행 영상 백업, AI에게 밤새 맡기고 아침에 검증 보고 받기</a></nav>
+</main>
+<footer class="site">
+  <div class="wrap">© 2026 강준구 · <a href="/feed.xml">RSS</a></div>
+</footer>
+</body>
+</html>

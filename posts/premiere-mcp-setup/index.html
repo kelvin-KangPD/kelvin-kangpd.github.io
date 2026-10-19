@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기 · 강PD 로그</title>
+<meta name="description" content="Claude 데스크톱 앱과 프리미어 MCP로 AI가 내 PC와 프리미어를 직접 조작하게 연결했고, 설치 함정과 포트 다툼까지 하나씩 풀었다.">
+<meta name="naver-site-verification" content="08126fe2f9fece07e9a7d4ce506ffe5ac34effa9">
+<meta name="google-site-verification" content="DGgQ1KaoMWEGQy5mMYvWlhL2FhlGd11kbwJkMVg-3lE">
+<meta property="og:title" content="AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기 · 강PD 로그">
+<meta property="og:description" content="Claude 데스크톱 앱과 프리미어 MCP로 AI가 내 PC와 프리미어를 직접 조작하게 연결했고, 설치 함정과 포트 다툼까지 하나씩 풀었다.">
+
+<link rel="alternate" type="application/rss+xml" title="강PD 로그" href="/feed.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23c2410c'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>강</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">강</span>강PD 로그</a>
+    <nav class="cats"><a href="/">전체</a><a href="/category/work/" class="on">작업기록</a><a href="/category/thoughts/">생각</a><a href="/category/daily/">일상</a><a href="/category/shorts/">숏츠</a><a href="/series/">시리즈</a></nav>
+  </div>
+</header>
+<main class="wrap">
+<article class="post"><header><a class="cat c-work" href="/category/work/">작업기록</a><h1>AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기</h1><time>2026. 10. 18.</time></header><aside class="series-box"><a class="series-name" href="/series/video-archive-ai/">시리즈 · 개인 영상 아카이브와 AI</a><ol><li><span>1부</span><a href="/posts/travel-footage-ai-backup/">여행 영상 백업, AI에게 밤새 맡기고 아침에 검증 보고 받기</a></li><li><span>2부</span><a href="/posts/travel-footage-time-sync-sequences/">카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기</a></li><li class="now"><span>3부</span>AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기</li><li><span>4부</span><a href="/posts/travel-footage-captions-efficiency/">62시간 여행 영상 자막 만들기와 AI 작업 효율</a></li><li class="soon"><span>5부</span>언제 편집할지 몰라도 찍어둔 영상들의 앞날 <em>준비 중</em></li><li class="soon"><span>6부</span>혼자 감당 못 하던 작업량, AI가 바꾼 아카이브의 가치 <em>준비 중</em></li><li class="soon"><span>7부</span>저장장치의 가치는 더 올라간다 <em>준비 중</em></li></ol></aside><div class="prose"><p>Claude 데스크톱 앱과 프리미어 MCP로 AI가 내 PC와 프리미어를 직접 조작하게 연결했고,
+<strong>설치 함정과 포트 다툼까지 하나씩 풀었다.</strong></p>
+<p>1·2부의 작업이 가능했던 건 이 연결 덕분이다.</p>
+<h2 id="_1">무엇을 어떻게 연결했나</h2>
+<p>말로 지시만 받고 내가 손으로 하는 방식이었으면 이 분량은 못 했다.</p>
+<table>
+<thead>
+<tr>
+<th>연결</th>
+<th>AI가 하는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude 데스크톱 앱 + 원격 연결</td>
+<td>휴대폰이나 회사에서 대화해도 집 PC에서 작업이 돈다</td>
+</tr>
+<tr>
+<td>파일·명령창</td>
+<td>드라이브 목록 보기, 복사 결과 대조, ffmpeg로 촬영 시각·소리 뽑기, 파이썬 스크립트 실행</td>
+</tr>
+<tr>
+<td>화면 조작</td>
+<td>7-Zip, 프리미어, 미디어 인코더를 클릭으로 조작</td>
+</tr>
+<tr>
+<td>프리미어 MCP</td>
+<td>프리미어 안에 붙은 브릿지 패널을 통해 시퀀스·캡션 트랙을 만들고 프로젝트를 저장</td>
+</tr>
+<tr>
+<td>미디어 인코더</td>
+<td>날짜별 시퀀스를 MP3로 뽑아 받아쓰기용으로</td>
+</tr>
+</tbody>
+</table>
+<p>화면 조작에도 한계는 있었다. 탐색기는 클릭만 되고 복사·붙여넣기·끌어다 놓기가 막혀 있어서, 휴대폰처럼 드라이브 문자가 없는 장치는 내가 직접 옮겨야 했다.</p>
+<h2 id="mcp">프리미어 MCP</h2>
+<p>MCP는 AI가 다른 프로그램을 도구처럼 쓰게 해주는 연결 방식이다.
+프리미어용은 깃허브에 공개된 Adobe-Premiere-Pro-MCP를 쓴다. 프리미어 쪽엔 「MCP Bridge」 확장 패널이 붙고, PC 안에서 작은 서버가 돌면서(포트 8097) AI의 명령을 프리미어 스크립트(ExtendScript)로 전달한다.</p>
+<p>처음 설치한 건 9월 초 결혼식 식전영상 작업 때다. 설치 파일만 돌리면 될 줄 알았는데 함정이 많았다.
+10월엔 회사 PC에도 같은 걸 깔았는데, 회사망에서만 생기는 문제가 하나 더 있었다.</p>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude 앱이 서버를 아예 안 띄움</td>
+<td>스토어 버전 앱은 설정 파일을 다른 경로에서 읽음</td>
+<td>실제 경로(LocalCache 아래)에 등록</td>
+</tr>
+<tr>
+<td>설정이 조용히 무시됨</td>
+<td>설치 스크립트가 설정 파일 맨 앞에 BOM(보이지 않는 문자)을 넣음</td>
+<td>BOM 없이 다시 저장</td>
+</tr>
+<tr>
+<td>서버 실행 실패</td>
+<td>설정에 node라고만 적혀 있어 앱이 못 찾음</td>
+<td>node.exe 전체 경로로</td>
+</tr>
+<tr>
+<td>패널은 Connected인데 명령이 안 먹음</td>
+<td>대화창마다 서버가 따로 떠서 포트 하나를 두고 다툼</td>
+<td>남은 서버 프로세스 정리 후 재연결</td>
+</tr>
+<tr>
+<td>프리미어에서 키보드가 먹통</td>
+<td>브릿지 패널이 키 입력을 가져감</td>
+<td>손으로 편집할 땐 패널을 닫음</td>
+</tr>
+<tr>
+<td>회사 PC에서 설치 실패</td>
+<td>회사 보안장비 인증서를 Node가 못 믿음</td>
+<td>Node에 윈도우 인증서 저장소를 쓰게 하는 옵션</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">설치 순서 정리</h2>
+<p>여러 번 막히고 나서 정리한 순서다. 다른 PC에 깔 때도 이대로 하면 된다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>어디서</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>파워쉘</td>
+<td>Node.js 설치 확인. 없으면 설치 후 새 창</td>
+</tr>
+<tr>
+<td>2</td>
+<td>브라우저</td>
+<td>깃허브에서 Adobe-Premiere-Pro-MCP를 ZIP으로 받아 문서 폴더에 풀기. 나중에 옮기면 프리미어 확장 연결이 깨지니 처음부터 최종 위치에</td>
+</tr>
+<tr>
+<td>3</td>
+<td>메모장</td>
+<td>install.bat 내용을 먼저 열어서 확인. 레지스트리 설정, 확장 폴더 연결, 패키지 설치·빌드, 설정 기록 말고 낯선 동작이 있으면 중단</td>
+</tr>
+<tr>
+<td>4</td>
+<td>파워쉘</td>
+<td>install.bat 실행, 서버 파일(dist\server.js)이 생겼는지 확인</td>
+</tr>
+<tr>
+<td>5</td>
+<td>프리미어</td>
+<td>완전히 껐다 켜고 창 &gt; 확장 &gt; MCP Bridge 패널 열기</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Claude 앱</td>
+<td>한 번 실행했다 종료해서 설정 폴더 만들기</td>
+</tr>
+<tr>
+<td>7</td>
+<td>파워쉘</td>
+<td>실제 설정 파일 경로에 서버 등록. BOM 없이 저장, node는 전체 경로로</td>
+</tr>
+<tr>
+<td>8</td>
+<td>파워쉘</td>
+<td>Claude 앱을 완전히 종료하고 다시 실행. 설정은 앱이 켜질 때 한 번만 읽음</td>
+</tr>
+<tr>
+<td>9</td>
+<td>프리미어</td>
+<td>패널에 Connected 확인</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Claude 앱</td>
+<td>새 대화에서 연결 상태 확인, 수정 없이 트랙 구성만 읽어보게 해서 검증</td>
+</tr>
+</tbody>
+</table>
+<p>평소에 켜는 순서도 정해뒀다.</p>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>다른 MCP 프로그램과 다른 Claude 대화창 끄기</td>
+</tr>
+<tr>
+<td>2</td>
+<td>포트 8097을 잡고 남은 서버가 있으면 정리</td>
+</tr>
+<tr>
+<td>3</td>
+<td>프리미어 실행, 프로젝트와 시퀀스 열기</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Claude 앱 실행(서버가 자동으로 뜸)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>브릿지 패널 Connected 확인 후 작업</td>
+</tr>
+<tr>
+<td>6</td>
+<td>손으로 편집할 땐 패널 닫기. 서버는 살아 있어서 다시 열면 바로 붙음</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">이번 주말: 포트 다툼과 브릿지 수정</h2>
+<p>이번 주말에도 포트 다툼이 또 터졌다. 새 대화창으로 넘어갈 때마다 옛 대화창의 서버가 포트를 쥐고 있어서, 패널은 Connected인데 명령이 허공으로 사라졌다.
+처음엔 남은 서버를 한 번에 정리하는 파워쉘 한 줄로 버텼다. 그런데 대화창을 옮길 때마다 반복이라 번거로웠다.
+그래서 이번엔 AI가 브릿지 코드 자체를 고쳤다. 새로 뜬 서버가 옛 서버에게 「포트 넘겨줘」라고 요청하면 옛 서버가 양보하는 방식이다. 로컬에서 흉내 내서 시험해본 다음 적용했다. 새 서버는 뜬 뒤 15초 동안만 넘겨달라고 요청하고, 양보한 서버는 다시 뺏으려 하지 않고 조용히 기다린다. 그래서 보통은 가장 최근 대화창이 이긴다.
+고친 건 빌드 결과물과 원본 소스 양쪽이라, 나중에 다시 빌드해도 수정이 유지된다.
+그래도 첫 대화에선 연결이 끝내 안 붙어서, 시퀀스는 XML 파일로 만들어 화면 조작으로 불러왔다. 다음 대화부터는 MCP로 캡션 트랙을 올리고 저장까지 했다.</p>
+<p>다음 글에서는 62시간 분량 자막을 만든 방식과, AI 작업을 효율적으로 굴리면서 배운 것들을 남긴다.</p></div><aside class="series-box"><a class="series-name" href="/series/video-archive-ai/">시리즈 · 개인 영상 아카이브와 AI</a><ol><li><span>1부</span><a href="/posts/travel-footage-ai-backup/">여행 영상 백업, AI에게 밤새 맡기고 아침에 검증 보고 받기</a></li><li><span>2부</span><a href="/posts/travel-footage-time-sync-sequences/">카메라 다섯 대 촬영 시각 맞추고 프리미어 날짜별 시퀀스 만들기</a></li><li class="now"><span>3부</span>AI가 프리미어를 직접 만지게: 프리미어 MCP 연결기</li><li><span>4부</span><a href="/posts/travel-footage-captions-efficiency/">62시간 여행 영상 자막 만들기와 AI 작업 효율</a></li><li class="soon"><span>5부</span>언제 편집할지 몰라도 찍어둔 영상들의 앞날 <em>준비 중</em></li><li class="soon"><span>6부</span>혼자 감당 못 하던 작업량, AI가 바꾼 아카이브의 가치 <em>준비 중</em></li><li class="soon"><span>7부</span>저장장치의 가치는 더 올라간다 <em>준비 중</em></li></ol></aside><footer><a class="tag" href="/tag/AI/">#AI</a><a class="tag" href="/tag/프리미어/">#프리미어</a><a class="tag" href="/tag/MCP/">#MCP</a><a class="tag" href="/tag/자동화/">#자동화</a></footer></article><nav class="pager"><a href="/posts/travel-footage-ai-backup/"><span>다음 글</span>여행 영상 백업, AI에게 밤새 맡기고 아침에 검증 보고 받기</a><span></span></nav>
+</main>
+<footer class="site">
+  <div class="wrap">© 2026 강준구 · <a href="/feed.xml">RSS</a></div>
+</footer>
+</body>
+</html>
