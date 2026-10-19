@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>네이버 블로그 글쓰기, AI로 임시저장 직전까지 완전 자동화 · 강PD 로그</title>
+<meta name="description" content="하루 한 편, 매번 30분 넘게 손으로 하던 네이버 블로그 업로드를 AI가 브라우저를 직접 조종해 본문·사진·캡션·제목까지 넣고 임시저장하는 데까지 자동화했다.">
+<meta name="naver-site-verification" content="08126fe2f9fece07e9a7d4ce506ffe5ac34effa9">
+<meta name="google-site-verification" content="DGgQ1KaoMWEGQy5mMYvWlhL2FhlGd11kbwJkMVg-3lE">
+<meta property="og:title" content="네이버 블로그 글쓰기, AI로 임시저장 직전까지 완전 자동화 · 강PD 로그">
+<meta property="og:description" content="하루 한 편, 매번 30분 넘게 손으로 하던 네이버 블로그 업로드를 AI가 브라우저를 직접 조종해 본문·사진·캡션·제목까지 넣고 임시저장하는 데까지 자동화했다.">
+
+<link rel="alternate" type="application/rss+xml" title="강PD 로그" href="/feed.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23c2410c'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>강</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">강</span>강PD 로그</a>
+    <nav class="cats"><a href="/">전체</a><a href="/category/work/" class="on">작업기록</a><a href="/category/thoughts/">생각</a><a href="/category/daily/">일상</a><a href="/category/shorts/">숏츠</a><a href="/series/">시리즈</a></nav>
+  </div>
+</header>
+<main class="wrap">
+<article class="post"><header><a class="cat c-work" href="/category/work/">작업기록</a><h1>네이버 블로그 글쓰기, AI로 임시저장 직전까지 완전 자동화</h1><time>2026. 10. 19.</time></header><aside class="series-box"><a class="series-name" href="/series/naver-blog-automation/">시리즈 · 네이버 블로그 자동화와 콘텐츠 선점</a><ol><li class="now"><span>1부</span>네이버 블로그 글쓰기, AI로 임시저장 직전까지 완전 자동화</li><li><span>2부</span><a href="/posts/content-land-grab/">콘텐츠가 무한히 쏟아지기 전에, 아직 비어 있는 언어권을 선점해야겠다</a></li></ol></aside><div class="prose"><p>하루 한 편, 매번 30분 넘게 손으로 하던 네이버 블로그 업로드를
+<strong>AI가 브라우저를 직접 조종해 본문·사진·캡션·제목까지 넣고 임시저장하는 데까지 자동화했다.</strong></p>
+<p>어제 처음으로 끝까지 성공했다.
+내가 하는 건 임시저장된 글을 열어 한 번 훑어보고 발행 버튼을 누르는 것뿐이다.
+회사 업무에 바로 쓸 수 있는 수준이라는 게 이번 작업에서 제일 큰 의미다.</p>
+<h2 id="_1">원래는 이랬다</h2>
+<p>회사 블로그 글을 네이버 블로그로 옮기는 업무를 하고 있다. 하루 한 편 정도 올린다.
+글 자체는 이미 AI와 같이 쓰고 있었다. 문제는 그다음, 네이버 에디터에 넣는 과정이었다.</p>
+<p>네이버 블로그는 글을 올리는 공식 API가 없다. 그래서 AI가 쓴 글을 결국 사람이 손으로 옮겨야 했다.
+그나마 줄이려고 만든 게 즐겨찾기 버튼(북마클릿)과 파워쉘 명령이었다.</p>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>담당</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AI</td>
+<td>본문, 제목 후보, 사진 목록과 캡션이 담긴 작업 시트 만들기</td>
+</tr>
+<tr>
+<td>2</td>
+<td>사람</td>
+<td>작업 시트의 「사진 받기 명령」을 복사해 파워쉘에 붙여넣기</td>
+</tr>
+<tr>
+<td>3</td>
+<td>사람</td>
+<td>「본문 복사」 눌러서 네이버 글쓰기에 붙여넣기</td>
+</tr>
+<tr>
+<td>4</td>
+<td>사람</td>
+<td>즐겨찾기 「서식 변환」 누르기 (인용구 모양, 구분선 모양 바꾸기)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>사람</td>
+<td>즐겨찾기 「사진 넣기」를 사진 수만큼 누르고, 매번 파일 선택 창에서 사진 고르기</td>
+</tr>
+<tr>
+<td>6</td>
+<td>사람</td>
+<td>사진마다 캡션 칸 눌러서 붙여넣기</td>
+</tr>
+<tr>
+<td>7</td>
+<td>사람</td>
+<td>제목 입력, 링크 카드 확인, 발행</td>
+</tr>
+</tbody>
+</table>
+<p>버튼 덕분에 많이 줄긴 했다. 그래도 사진이 열 장 넘어가면 클릭이 수십 번이다.
+캡션은 자동으로 넣는 데 실패해서 클립보드에 복사만 해두고 사람이 붙여넣는 식이었다.
+<strong>한 편에 30분은 기본으로 들었다.</strong></p>
+<h2 id="ai">바꾼 방식: AI가 브라우저를 코드로 조종</h2>
+<p>핵심은 Playwright MCP다.
+Playwright는 브라우저를 코드로 조작하는 도구고, MCP로 연결하면 AI가 그걸 직접 쓴다.
+화면을 캡처해서 좌표를 누르는 방식이 아니라 페이지 구조를 읽고 요소를 골라서 조작한다. 그래서 빠르고, 좌표가 어긋날 일이 적다.</p>
+<p>연결은 이렇게 했다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>웨일 바로가기 대상 끝에 <code>--remote-debugging-port=9222</code>를 붙여서, 그 바로가기로 웨일 실행</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Claude 데스크톱 앱 설정 파일에 Playwright MCP 등록. 이미 켜진 웨일(9222 포트)에 붙도록</td>
+</tr>
+<tr>
+<td>3</td>
+<td>앱을 완전히 종료했다가 다시 켜기</td>
+</tr>
+</tbody>
+</table>
+<p>설정 파일에 들어간 내용은 이거다. 프리미어 MCP를 이미 쓰고 있어서 둘이 같이 들어가 있다.</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;cmd&quot;,
+      &quot;args&quot;: [&quot;/c&quot;, &quot;npx&quot;, &quot;-y&quot;, &quot;@playwright/mcp@latest&quot;, &quot;--cdp-endpoint&quot;, &quot;http://localhost:9222&quot;]
+    },
+    &quot;premiere-pro&quot;: { &quot;...&quot;: &quot;...&quot; }
+  }
+}
+</code></pre>
+<p>새 웨일을 따로 띄우는 게 아니라 내가 평소 쓰는 웨일에 붙는다는 점이 중요하다.
+네이버 로그인이 이미 돼 있으니 아이디·비밀번호를 AI에게 넘길 일이 없다.</p>
+<h2 id="_2">네이버 에디터와 씨름한 부분</h2>
+<p>네이버 스마트에디터는 자동화하기 까다롭다. 실제로 막혔던 곳과 푼 방법을 남겨둔다.</p>
+<table>
+<thead>
+<tr>
+<th>막힌 곳</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>본문 붙여넣기</td>
+<td>클립보드를 쓰지 않고, 에디터 안쪽 입력 영역에 가짜 붙여넣기 이벤트를 직접 보낸다. HTML 그대로 들어가서 표·굵게·줄바꿈이 유지된다</td>
+</tr>
+<tr>
+<td>문단 여백</td>
+<td>네이버는 문단 여백을 무시한다. 빈 줄은 실제 빈 문단으로 넣어야 한다</td>
+</tr>
+<tr>
+<td>인용구 모양</td>
+<td>HTML로 붙인 인용구는 무조건 따옴표 인용구로 들어온다. 붙인 다음 인용구를 눌러 모양 버튼으로 바꾼다</td>
+</tr>
+<tr>
+<td>사진 자리</td>
+<td>본문에 <code>[📸 사진 01 | 캡션: …]</code> 같은 자리표시 줄을 넣어두고, 그 줄을 지운 자리에서 사진 버튼을 누른다</td>
+</tr>
+<tr>
+<td>줄 지우기</td>
+<td>Shift+Home 같은 선택 키를 에디터가 가로챈다. 줄 끝을 클릭하고 Backspace를 글자 수만큼 반복한다</td>
+</tr>
+<tr>
+<td>사진 올리기</td>
+<td>파일 선택 창을 띄우지 않고 Playwright의 파일 업로드 기능으로 바로 넣는다. 단, 작업 폴더 밖 파일은 거부해서 사본을 작업 폴더에 둔다</td>
+</tr>
+<tr>
+<td>캡션 칸</td>
+<td>사진을 먼저 클릭해야 캡션 칸이 나타난다. 예전에 캡션 자동 입력이 실패한 이유가 이거였다</td>
+</tr>
+<tr>
+<td>업로드 확인</td>
+<td>올라간 직후 사진 주소가 svg 자리표시로 보이는데 정상이다. 몇 초 기다리면 된다</td>
+</tr>
+<tr>
+<td>버튼이 안 눌림</td>
+<td>사이드 패널에 가려졌거나 애니메이션 중이다. 버튼 위치를 매번 다시 구해서 마우스로 누른다</td>
+</tr>
+<tr>
+<td>숨은 탭</td>
+<td>탭이 뒤에 숨어 있으면 화면이 응답하지 않는다. 탭을 앞으로 가져온 뒤 진행한다</td>
+</tr>
+</tbody>
+</table>
+<p>본문 붙여넣기 코드는 이렇다. 이게 되고 나서 나머지가 풀렸다.</p>
+<pre><code class="language-js">async (page) =&gt; {
+  const HTML = `...본문 HTML...`;
+  const fr = page.frame({ name: 'mainFrame' }) || page.mainFrame();
+  await fr.locator('.se-component.se-text .se-text-paragraph').first().click();
+  await page.waitForTimeout(400);
+  await fr.evaluate((h) =&gt; {
+    const ib = [...document.querySelectorAll('iframe')]
+      .map(i =&gt; { try { return i.contentDocument } catch (e) { return null } })
+      .find(x =&gt; x &amp;&amp; x.body &amp;&amp; x.body.isContentEditable);
+    const W = ib.defaultView, dt = new W.DataTransfer();
+    dt.setData('text/html', h);
+    dt.setData('text/plain', h.replace(/&lt;[^&gt;]+&gt;/g, ''));
+    ib.body.dispatchEvent(new W.ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true }));
+  }, HTML);
+  await page.waitForTimeout(4000);
+}
+</code></pre>
+<p>사진은 한 장씩 반복이다. 한 번 실행하면 「앞 사진에 캡션 넣기」와 「다음 📸 자리를 지우고 사진 버튼 누르기」를 같이 하고, 파일 선택 상태가 되면 그 순번의 사진을 올린다. 📸 자리가 더 없을 때까지 돈다.</p>
+<h2 id="_3">발행은 절대 안 누르게</h2>
+<p>마지막 단계는 임시저장이다. 여기서 제일 신경 쓴 건 발행 버튼을 실수로라도 누르지 않게 하는 것.
+버튼 글자를 먼저 읽어서 「저장」이 아니거나 「발행」이 들어 있으면 누르지 않고 멈춘다.
+저장 버튼 옆 숫자가 1 늘었는지로 성공을 확인한다.</p>
+<pre><code class="language-js">async (page) =&gt; {
+  const fr = page.frame({ name: 'mainFrame' }) || page.mainFrame();
+  const btn = fr.locator('button[class*=&quot;save_btn&quot;]').first();
+  const label = (await btn.textContent()).trim();
+  if (!/저장/.test(label) || /발행/.test(label)) return { error: label };
+  const cnt = () =&gt; fr.evaluate(() =&gt; document.querySelector('[class*=&quot;save_btn&quot;]').parentElement.textContent);
+  const before = await cnt();
+  const b = await btn.boundingBox();
+  await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2);
+  await page.waitForTimeout(2500);
+  return { before, after: await cnt() };
+}
+</code></pre>
+<p>발행을 사람 몫으로 남긴 건 일부러다.
+공개되는 글이고 회사 이름으로 나가는 글이라, 마지막 확인은 내가 한다.
+<strong>대신 그 확인 말고는 손댈 게 없다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>예전</th>
+<th>지금</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>글 쓰기</td>
+<td>AI</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>사진 준비</td>
+<td>파워쉘에 명령 붙여넣기</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>본문 넣기</td>
+<td>복사·붙여넣기</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>서식 정리</td>
+<td>즐겨찾기 버튼</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>사진·캡션</td>
+<td>사진 수만큼 클릭, 캡션 붙여넣기</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>제목·링크 카드</td>
+<td>사람</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>임시저장</td>
+<td>사람</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>확인·발행</td>
+<td>사람</td>
+<td>사람</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">개인 블로그용으로도 만들었다</h2>
+<p>같은 방식을 개인 네이버 블로그에도 쓸 수 있게 스킬로 따로 정리했다.
+회사 버전과 다른 점은 말투다. 내 예전 글 몇 편을 읽어서 어미, 이모지, 문단 길이, 사진 배치 습관을 표로 뽑아두고 그 말투로 쓰게 했다.
+사진 폴더와 대충 적은 메모만 주면 글을 써서 임시저장까지 해둔다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>입력</td>
+<td>사진 폴더 경로 + 메모</td>
+</tr>
+<tr>
+<td>말투</td>
+<td>처음 한 번, 최근 글 5편 구조를 읽어서 문체 프로필 저장</td>
+</tr>
+<tr>
+<td>지어내지 않기</td>
+<td>메모·사진에 없는 가게 이름, 가격, 날짜는 안 쓰고 <code>[확인 필요]</code>로 남김</td>
+</tr>
+<tr>
+<td>사진</td>
+<td>HEIC는 JPG로, 너무 크면 줄이고, 원하면 위치정보 지운 사본 사용</td>
+</tr>
+<tr>
+<td>끝</td>
+<td>임시저장. 발행은 내가</td>
+</tr>
+</tbody>
+</table>
+<p>스킬 파일은 공개해둔다. Claude에 스킬로 넣어 쓰면 된다.</p>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/files/naver-personal-draft/SKILL.md">SKILL.md</a></td>
+<td>전체 절차와 코드</td>
+</tr>
+<tr>
+<td><a href="/files/naver-personal-draft/my-blog.md">my-blog.md</a></td>
+<td>문체 프로필 빈 양식</td>
+</tr>
+</tbody>
+</table>
+<p>집 PC에도 같은 연결을 깔다가 중간에 멈춰 있다. 설정 파일까지 넣었는데 Claude 앱이 아직 Playwright를 못 잡았다. 앱 설정의 개발자 탭에서 어떤 설정 파일을 읽는지 확인하는 것부터 다시 할 거다.</p>
+<p>다음 글에는 이걸 해놓고 든 생각을 적는다. 이 도구가 생기고 나서 왜 서둘러야겠다고 느꼈는지.</p></div><aside class="series-box"><a class="series-name" href="/series/naver-blog-automation/">시리즈 · 네이버 블로그 자동화와 콘텐츠 선점</a><ol><li class="now"><span>1부</span>네이버 블로그 글쓰기, AI로 임시저장 직전까지 완전 자동화</li><li><span>2부</span><a href="/posts/content-land-grab/">콘텐츠가 무한히 쏟아지기 전에, 아직 비어 있는 언어권을 선점해야겠다</a></li></ol></aside><footer><a class="tag" href="/tag/자동화/">#자동화</a><a class="tag" href="/tag/AI/">#AI</a><a class="tag" href="/tag/블로그/">#블로그</a><a class="tag" href="/tag/MCP/">#MCP</a></footer></article><nav class="pager"><a href="/posts/travel-footage-captions-efficiency/"><span>다음 글</span>62시간 여행 영상 자막 만들기와 AI 작업 효율</a><a href="/posts/hello/" class="r"><span>이전 글</span>블로그를 열며</a></nav>
+</main>
+<footer class="site">
+  <div class="wrap">© 2026 강준구 · <a href="/feed.xml">RSS</a></div>
+</footer>
+</body>
+</html>
