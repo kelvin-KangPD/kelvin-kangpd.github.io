@@ -5,6 +5,7 @@ category: 작업기록
 tags: [AI, 프리미어, MCP, 자동화]
 series: video-archive-ai
 part: 3
+cover: /images/20261018-premiere-mcp-setup/01-mcp-브릿지-연결.webp
 summary: Claude 데스크톱 앱과 프리미어 MCP로 AI가 내 PC와 프리미어를 직접 조작하게 연결했고, 설치 함정과 포트 다툼까지 하나씩 풀었다.
 ---
 
@@ -31,6 +32,9 @@ Claude 데스크톱 앱과 프리미어 MCP로 AI가 내 PC와 프리미어를 �
 
 MCP는 AI가 다른 프로그램을 도구처럼 쓰게 해주는 연결 방식이다.
 프리미어용은 깃허브에 공개된 Adobe-Premiere-Pro-MCP를 쓴다. 프리미어 쪽엔 「MCP Bridge」 확장 패널이 붙고, PC 안에서 작은 서버가 돌면서(포트 8097) AI의 명령을 프리미어 스크립트(ExtendScript)로 전달한다.
+
+![프리미어 MCP Bridge 패널이 Connected 상태로 떠 있고 연결 로그가 보이는 화면](/images/20261018-premiere-mcp-setup/01-mcp-브릿지-연결.webp)
+*MCP Bridge 패널. 초록색 Connected가 떠야 AI 명령이 프리미어로 들어간다.*
 
 처음 설치한 건 9월 초 결혼식 식전영상 작업 때다. 설치 파일만 돌리면 될 줄 알았는데 함정이 많았다.
 10월엔 회사 PC에도 같은 걸 깔았는데, 회사망에서만 생기는 문제가 하나 더 있었다.
