@@ -109,3 +109,18 @@ footer.site .wrap { padding-top: 24px; padding-bottom: 32px; }
   .thumb.wide { width: 96px; height: 66px; }
   .prose { font-size: 16px; }
 }
+
+.series-box { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin: 0 0 32px; }
+.prose + .series-box { margin: 40px 0 0; }
+.series-name { font-size: 14px; font-weight: 700; color: var(--accent); text-decoration: none; }
+.series-box ol, .series-list { list-style: none; padding: 0; margin: 10px 0 0; }
+.series-box li { font-size: 15px; padding: 5px 0; color: var(--muted); }
+.series-box li a { color: var(--text); text-decoration: none; }
+.series-box li a:hover { color: var(--accent); }
+.series-box li.now { color: var(--text); font-weight: 700; }
+.series-box li span, .series-list li span { display: inline-block; min-width: 34px; color: var(--muted); font-weight: 400; }
+.series-box em, .series-list em { font-style: normal; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 7px; margin-left: 4px; }
+.series-list li { border-bottom: 1px solid var(--line); padding: 16px 0; font-size: 18px; color: var(--muted); }
+.series-list li a { display: block; text-decoration: none; color: var(--text); font-weight: 600; }
+.series-list li a:hover { color: var(--accent); }
+.series-list time { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin: 2px 0 0 34px; }

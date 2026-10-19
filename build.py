@@ -41,7 +41,7 @@ CATEGORIES = [
     ("숏츠", "shorts"),
 ]
 CAT_SLUG = dict(CATEGORIES)
-GENERATED = ["posts", "category", "tag", "index.html", "feed.xml", "404.html", "sitemap.xml", "robots.txt"]
+GENERATED = ["posts", "category", "tag", "series", "index.html", "feed.xml", "404.html", "sitemap.xml", "robots.txt"]
 
 
 def yt_id(v):
@@ -90,6 +90,8 @@ def load_posts():
             "summary": summary,
             "youtube": meta.get("youtube"),
             "cover": meta.get("cover"),
+            "series": meta.get("series"),
+            "part": meta.get("part"),
             "slug": slug,
             "url": f"/posts/{slug}/",
             "html": render_body(body),
@@ -98,11 +100,48 @@ def load_posts():
     return posts
 
 
+def load_series():
+    f = ROOT / "content" / "series.yml"
+    return (yaml.safe_load(f.read_text(encoding="utf-8")) or {}) if f.exists() else {}
+
+
+SERIES = load_series()
+
+
+def series_parts(sid, posts):
+    info = SERIES.get(sid, {})
+    pub = {p["part"]: p for p in posts if p["series"] == sid}
+    plan = info.get("parts", [])
+    n = max([len(plan)] + list(pub.keys() or [0]))
+    rows = []
+    for i in range(1, n + 1):
+        p = pub.get(i)
+        rows.append((i, p["title"] if p else (plan[i - 1] if i <= len(plan) else ""), p))
+    return info, rows
+
+
+def series_box(p, posts):
+    info, rows = series_parts(p["series"], posts)
+    items = ""
+    for i, title, q in rows:
+        if q is p:
+            items += f'<li class="now"><span>{i}부</span>{html.escape(title)}</li>'
+        elif q:
+            items += f'<li><span>{i}부</span><a href="{q["url"]}">{html.escape(title)}</a></li>'
+        else:
+            items += f'<li class="soon"><span>{i}부</span>{html.escape(title)} <em>준비 중</em></li>'
+    return (f'<aside class="series-box"><a class="series-name" href="/series/{p["series"]}/">시리즈 · '
+            f'{html.escape(info.get("title", p["series"]))}</a><ol>{items}</ol></aside>')
+
+
 def nav(active=""):
     items = ['<a href="/"%s>전체</a>' % (' class="on"' if active == "all" else "")]
     for name, slug in CATEGORIES:
         on = ' class="on"' if active == name else ""
         items.append(f'<a href="/category/{slug}/"{on}>{name}</a>')
+    if SERIES:
+        on = ' class="on"' if active == "series" else ""
+        items.append(f'<a href="/series/"{on}>시리즈</a>')
     return "".join(items)
 
 
@@ -154,7 +193,7 @@ def write(rel, content):
     out.write_text(content, encoding="utf-8")
 
 
-def post_page(p, prev, nxt):
+def post_page(p, prev, nxt, posts=()):
     cslug = CAT_SLUG.get(p["category"], "thoughts")
     tags = "".join(f'<a class="tag" href="/tag/{t}/">#{html.escape(str(t))}</a>' for t in p["tags"])
     video = embed(p["youtube"], p["category"] == "숏츠") if p["youtube"] and "{{" not in p["html"] and "youtube.com/embed" not in p["html"] else ""
@@ -164,7 +203,9 @@ def post_page(p, prev, nxt):
     pager += "</nav>"
     body = (f'<article class="post"><header><a class="cat c-{cslug}" href="/category/{cslug}/">{p["category"]}</a>'
             f'<h1>{html.escape(p["title"])}</h1><time>{fmt(p["date"])}</time></header>'
+            f'{series_box(p, posts) if p["series"] else ""}'
             f'{video}<div class="prose">{p["html"]}</div>'
+            f'{series_box(p, posts) if p["series"] else ""}'
             f'<footer>{tags}</footer></article>{pager}')
     og = p["cover"] or (f"https://i.ytimg.com/vi/{yt_id(p['youtube'])}/hqdefault.jpg" if p["youtube"] else None)
     return page(p["title"], body, p["category"], p["summary"], og)
@@ -192,7 +233,24 @@ def main():
     for i, p in enumerate(posts):
         prev = posts[i + 1] if i + 1 < len(posts) else None
         nxt = posts[i - 1] if i > 0 else None
-        write(f"posts/{p['slug']}/index.html", post_page(p, prev, nxt))
+        write(f"posts/{p['slug']}/index.html", post_page(p, prev, nxt, posts))
+    sitems = ""
+    for sid, info in SERIES.items():
+        _, rows = series_parts(sid, posts)
+        body = f'<header class="list-head"><h1>{html.escape(info.get("title", sid))}</h1><p>{html.escape(info.get("desc", ""))}</p></header><ol class="series-list">'
+        for i, title, q in rows:
+            if q:
+                body += f'<li><a href="{q["url"]}"><span>{i}부</span>{html.escape(title)}<time>{fmt(q["date"])}</time></a></li>'
+            else:
+                body += f'<li class="soon"><span>{i}부</span>{html.escape(title)} <em>준비 중</em></li>'
+        body += "</ol>"
+        write(f"series/{sid}/index.html", page(info.get("title", sid), body, "series", info.get("desc")))
+        done = sum(1 for r in rows if r[2])
+        sitems += (f'<article class="card"><a href="/series/{sid}/" class="card-link"><div class="card-text">'
+                   f'<div class="meta"><span>{done} / {len(rows)}부</span></div><h2>{html.escape(info.get("title", sid))}</h2>'
+                   f'<p>{html.escape(info.get("desc", ""))}</p></div></a></article>')
+    if SERIES:
+        write("series/index.html", page("시리즈", '<header class="list-head"><h1>시리즈</h1><p>여러 편에 걸쳐 이어지는 글</p></header><div class="list">' + sitems + "</div>", "series"))
     subs = {"작업기록": "만들면서 배운 것들", "생각": "머릿속을 꺼내 정리해둔 것", "일상": "평범한 날의 기록", "숏츠": "짧게 찍고 짧게 남긴 영상"}
     for name, slug in CATEGORIES:
         sel = [p for p in posts if p["category"] == name]
@@ -202,7 +260,7 @@ def main():
         sel = [p for p in posts if t in map(str, p["tags"])]
         write(f"tag/{t}/index.html", page(f"#{t}", listing(sel, f"#{t}")))
     write("feed.xml", feed(posts))
-    urls = ["/"] + [f"/category/{s}/" for _, s in CATEGORIES] + [p["url"] for p in posts]
+    urls = ["/"] + [f"/category/{s}/" for _, s in CATEGORIES] + [f"/series/{k}/" for k in SERIES] + [p["url"] for p in posts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
           + "".join(f"<url><loc>{SITE['url']}{u}</loc></url>" for u in urls) + "</urlset>")
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE['url']}/sitemap.xml\n")
