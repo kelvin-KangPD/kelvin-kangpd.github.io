@@ -89,6 +89,7 @@ def load_posts():
             "tags": meta.get("tags") or [],
             "summary": summary,
             "youtube": meta.get("youtube"),
+            "cover": meta.get("cover"),
             "slug": slug,
             "url": f"/posts/{slug}/",
             "html": render_body(body),
@@ -105,10 +106,11 @@ def nav(active=""):
     return "".join(items)
 
 
-def page(title, body, active="", desc=None):
+def page(title, body, active="", desc=None, image=None):
     full = SITE["title"] if title == SITE["title"] else f"{title} · {SITE['title']}"
     return (LAYOUT.replace("{{TITLE}}", html.escape(full))
             .replace("{{DESC}}", html.escape(desc or SITE["desc"]))
+            .replace("{{OGIMAGE}}", (f'<meta property="og:image" content="{image if image.startswith("http") else SITE["url"] + image}">' if image else ""))
             .replace("{{SITE}}", SITE["title"])
             .replace("{{NAV}}", nav(active))
             .replace("{{BODY}}", body)
@@ -123,7 +125,9 @@ def fmt(d):
 def card(p):
     cslug = CAT_SLUG.get(p["category"], "thoughts")
     thumb = ""
-    if p["youtube"]:
+    if p["cover"]:
+        thumb = f'<img class="thumb wide" loading="lazy" alt="" src="{p["cover"]}">'
+    elif p["youtube"]:
         thumb = (f'<img class="thumb" loading="lazy" alt="" '
                  f'src="https://i.ytimg.com/vi/{yt_id(p["youtube"])}/hqdefault.jpg">')
     return (f'<article class="card{" has-thumb" if thumb else ""}">'
@@ -162,7 +166,8 @@ def post_page(p, prev, nxt):
             f'<h1>{html.escape(p["title"])}</h1><time>{fmt(p["date"])}</time></header>'
             f'{video}<div class="prose">{p["html"]}</div>'
             f'<footer>{tags}</footer></article>{pager}')
-    return page(p["title"], body, p["category"], p["summary"])
+    og = p["cover"] or (f"https://i.ytimg.com/vi/{yt_id(p['youtube'])}/hqdefault.jpg" if p["youtube"] else None)
+    return page(p["title"], body, p["category"], p["summary"], og)
 
 
 def feed(posts):
