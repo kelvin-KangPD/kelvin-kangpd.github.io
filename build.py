@@ -16,6 +16,7 @@ youtube: 영상ID 또는 유튜브 주소 (숏츠 글이면 넣기)
 본문 안 아무 곳에나 {{shorts: 영상ID 또는 주소}} / {{youtube: 영상ID 또는 주소}} 로 영상 삽입 가능.
 """
 import html
+import json
 import re
 import shutil
 from datetime import date, datetime
@@ -33,7 +34,19 @@ SITE = {
     "desc": "작업과정과 생각, 일상을 쌓아두는 곳",
     "url": "https://kelvin-kangpd.github.io",
     "author": "강준구",
+    "cusdis_app_id": "",  # cusdis.com 대시보드의 App ID. 비어 있으면 댓글창을 안 붙임
 }
+CUSDIS_LOCALE = {"powered_by": "Cusdis 제공", "post_comment": "등록", "loading": "불러오는 중...", "email": "이메일 (선택)", "nickname": "닉네임", "reply_placeholder": "댓글...", "reply_btn": "답글", "sending": "보내는 중...", "mod_badge": "운영자", "content_is_required": "내용을 입력해 주세요", "nickname_is_required": "닉네임을 입력해 주세요", "comment_has_been_sent": "댓글이 등록됐어요. 확인 후 보여요."}
+
+
+def comments(p):
+    if not SITE["cusdis_app_id"]:
+        return ""
+    return (f'<section class="comments"><h2>댓글</h2>'
+            f'<script>window.CUSDIS_LOCALE={json.dumps(CUSDIS_LOCALE, ensure_ascii=False)}</script>'
+            f'<div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="{SITE["cusdis_app_id"]}" '
+            f'data-page-id="ko:{p["slug"]}" data-page-url="{SITE["url"]}{p["url"]}" data-page-title="{html.escape(p["title"])}" data-theme="auto"></div>'
+            '<script async defer src="https://cusdis.com/js/cusdis.es.js"></script></section>')
 CATEGORIES = [
     ("작업기록", "work"),
     ("생각", "thoughts"),
@@ -206,7 +219,7 @@ def post_page(p, prev, nxt, posts=()):
             f'{series_box(p, posts) if p["series"] else ""}'
             f'{video}<div class="prose">{p["html"]}</div>'
             f'{series_box(p, posts) if p["series"] else ""}'
-            f'<footer>{tags}</footer></article>{pager}')
+            f'<footer>{tags}</footer></article>{comments(p)}{pager}')
     og = p["cover"] or (f"https://i.ytimg.com/vi/{yt_id(p['youtube'])}/hqdefault.jpg" if p["youtube"] else None)
     return page(p["title"], body, p["category"], p["summary"], og)
 

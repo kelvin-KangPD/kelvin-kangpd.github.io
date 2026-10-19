@@ -124,3 +124,6 @@ footer.site .wrap { padding-top: 24px; padding-bottom: 32px; }
 .series-list li a { display: block; text-decoration: none; color: var(--text); font-weight: 600; }
 .series-list li a:hover { color: var(--accent); }
 .series-list time { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin: 2px 0 0 34px; }
+
+.comments { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+.comments h2 { font-size: 18px; margin: 0 0 12px; }
