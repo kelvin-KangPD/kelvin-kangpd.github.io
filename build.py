@@ -54,6 +54,7 @@ CATEGORIES = [
     ("숏츠", "shorts"),
 ]
 CAT_SLUG = dict(CATEGORIES)
+USED_CATS = set()  # 글이 1편 이상 있는 카테고리. 메뉴에는 이것만 보인다
 GENERATED = ["posts", "category", "tag", "series", "index.html", "feed.xml", "404.html", "sitemap.xml", "robots.txt"]
 
 
@@ -109,7 +110,10 @@ def load_posts():
             "url": f"/posts/{slug}/",
             "html": render_body(body),
         })
-    posts.sort(key=lambda p: (p["date"], p["slug"]), reverse=True)
+    # 날짜는 최신순, 같은 날짜 안에서는 시리즈 부 순서대로
+    posts.sort(key=lambda p: p["slug"], reverse=True)
+    posts.sort(key=lambda p: p["part"] or 0)
+    posts.sort(key=lambda p: p["date"], reverse=True)
     return posts
 
 
@@ -150,6 +154,8 @@ def series_box(p, posts):
 def nav(active=""):
     items = ['<a href="/"%s>전체</a>' % (' class="on"' if active == "all" else "")]
     for name, slug in CATEGORIES:
+        if name not in USED_CATS:
+            continue
         on = ' class="on"' if active == name else ""
         items.append(f'<a href="/category/{slug}/"{on}>{name}</a>')
     if SERIES:
@@ -242,6 +248,7 @@ def main():
         elif t.exists():
             t.unlink()
     posts = load_posts()
+    USED_CATS.update(p["category"] for p in posts)
     write("index.html", page(SITE["title"], listing(posts), "all"))
     for i, p in enumerate(posts):
         prev = posts[i + 1] if i + 1 < len(posts) else None
@@ -273,7 +280,7 @@ def main():
         sel = [p for p in posts if t in map(str, p["tags"])]
         write(f"tag/{t}/index.html", page(f"#{t}", listing(sel, f"#{t}")))
     write("feed.xml", feed(posts))
-    urls = ["/"] + [f"/category/{s}/" for _, s in CATEGORIES] + [f"/series/{k}/" for k in SERIES] + [p["url"] for p in posts]
+    urls = ["/"] + [f"/category/{s}/" for n, s in CATEGORIES if n in USED_CATS] + [f"/series/{k}/" for k in SERIES] + [p["url"] for p in posts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
           + "".join(f"<url><loc>{SITE['url']}{u}</loc></url>" for u in urls) + "</urlset>")
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE['url']}/sitemap.xml\n")
