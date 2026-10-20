@@ -110,9 +110,8 @@ def load_posts():
             "url": f"/posts/{slug}/",
             "html": render_body(body),
         })
-    # 날짜는 최신순, 같은 날짜 안에서는 시리즈 부 순서대로
-    posts.sort(key=lambda p: p["slug"], reverse=True)
-    posts.sort(key=lambda p: p["part"] or 0)
+    # 날짜는 최신순. 같은 날짜 안에서는 시리즈 글을 시리즈별 부 순서대로 위에, 시리즈 아닌 글은 그 아래에
+    posts.sort(key=lambda p: (not p["series"], str(p["series"] or ""), p["part"] or 0, p["slug"]))
     posts.sort(key=lambda p: p["date"], reverse=True)
     return posts
 
@@ -250,9 +249,11 @@ def main():
     posts = load_posts()
     USED_CATS.update(p["category"] for p in posts)
     write("index.html", page(SITE["title"], listing(posts), "all"))
-    for i, p in enumerate(posts):
-        prev = posts[i + 1] if i + 1 < len(posts) else None
-        nxt = posts[i - 1] if i > 0 else None
+    # 이전/다음 글은 읽는 순서 기준: 날짜 오래된 순, 같은 날짜 안에서는 목록에 보이는 순서(1부 → 2부)
+    chrono = sorted(posts, key=lambda p: p["date"])
+    for i, p in enumerate(chrono):
+        prev = chrono[i - 1] if i > 0 else None
+        nxt = chrono[i + 1] if i + 1 < len(chrono) else None
         write(f"posts/{p['slug']}/index.html", post_page(p, prev, nxt, posts))
     sitems = ""
     for sid, info in SERIES.items():
