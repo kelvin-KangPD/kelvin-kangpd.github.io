@@ -19,6 +19,7 @@ import html
 import json
 import re
 import shutil
+import subprocess
 from datetime import date, datetime
 from pathlib import Path
 
@@ -78,6 +79,16 @@ def render_body(text):
     return markdown.markdown(text, extensions=["extra", "sane_lists", "toc"])
 
 
+def added_at(f):
+    """글 파일이 처음 커밋된 시각(유닉스 초). 아직 커밋 전이면 지금 쓰는 글이라 가장 큰 값."""
+    try:
+        out = subprocess.run(["git", "log", "--diff-filter=A", "--follow", "--format=%ct", "--", str(f)],
+                             cwd=ROOT, capture_output=True, text=True).stdout.split()
+        return int(out[-1]) if out else float("inf")
+    except Exception:
+        return 0
+
+
 def load_posts():
     posts = []
     for f in sorted(POSTS_DIR.glob("*.md")):
@@ -107,12 +118,12 @@ def load_posts():
             "series": meta.get("series"),
             "part": meta.get("part"),
             "slug": slug,
+            "added": added_at(f),
             "url": f"/posts/{slug}/",
             "html": render_body(body),
         })
-    # 날짜는 최신순. 같은 날짜 안에서는 시리즈 글을 시리즈별 부 순서대로 위에, 시리즈 아닌 글은 그 아래에
-    posts.sort(key=lambda p: (not p["series"], str(p["series"] or ""), p["part"] or 0, p["slug"]))
-    posts.sort(key=lambda p: p["date"], reverse=True)
+    # 최신 글이 위. 같은 날짜 안에서는 먼저 올라간 글(첫 커밋 시각)이 아래, 같이 올라갔으면 앞 부가 아래
+    posts.sort(key=lambda p: (p["date"], p["added"], p["part"] or 0, p["slug"]), reverse=True)
     return posts
 
 
@@ -249,8 +260,7 @@ def main():
     posts = load_posts()
     USED_CATS.update(p["category"] for p in posts)
     write("index.html", page(SITE["title"], listing(posts), "all"))
-    # 이전/다음 글은 읽는 순서 기준: 날짜 오래된 순, 같은 날짜 안에서는 목록에 보이는 순서(1부 → 2부)
-    chrono = sorted(posts, key=lambda p: p["date"])
+    chrono = posts[::-1]  # 이전/다음 글은 오래된 순으로 이어지게
     for i, p in enumerate(chrono):
         prev = chrono[i - 1] if i > 0 else None
         nxt = chrono[i + 1] if i + 1 < len(chrono) else None
