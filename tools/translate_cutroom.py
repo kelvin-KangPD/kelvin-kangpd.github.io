@@ -101,7 +101,7 @@ def translate(meta, body, lang, key):
     prompt = PROMPT.format(lang=LANG_NAMES[lang], title=meta["title"],
                            summary=meta.get("summary", ""), body=body)
     last = None
-    for attempt in range(6):
+    for attempt in range(4):
         try:
             out = gemini(prompt, key)
             if structure(out["body"]) != structure(body):
@@ -113,7 +113,7 @@ def translate(meta, body, lang, key):
             last = e
             if isinstance(e, urllib.error.HTTPError) and e.code not in (429, 500, 502, 503, 504):
                 raise
-            time.sleep(10 * 2 ** attempt)
+            time.sleep(5 * 2 ** attempt)
     raise RuntimeError(f"{lang}: 재시도 소진: {last}")
 
 
@@ -186,7 +186,7 @@ def main():
         dest.write_text(render(meta, res), encoding="utf-8")
         print(f"  완료 {lang}/{slug}")
 
-    with cf.ThreadPoolExecutor(max_workers=2) as ex:
+    with cf.ThreadPoolExecutor(max_workers=5) as ex:
         futs = {ex.submit(run, j): j for j in jobs}
         for f in cf.as_completed(futs):
             try:
