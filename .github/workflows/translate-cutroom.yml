@@ -1,0 +1,105 @@
+name: Translate to Cutroom Notes
+
+# content/posts 의 한국어 글이 push 되면 en·id·hi·ar·th 로 번역해 cutroom-notes 에 커밋한다.
+# 손으로 돌릴 때: Actions 탭 → 이 워크플로 → Run workflow
+#   slug 를 비우면 번역본이 없는 글 전부, 적으면 그 글만 다시 번역.
+#   dry_run 을 켜면 cutroom-notes 에 푸시하지 않고 결과를 아티팩트로만 남긴다.
+
+on:
+  push:
+    branches: [main]
+    paths: ["content/posts/*.md"]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "이 슬러그만 다시 번역 (비우면 번역본 없는 글 전부)"
+        required: false
+        default: ""
+      dry_run:
+        description: "푸시하지 않고 결과만 아티팩트로"
+        type: boolean
+        default: false
+
+concurrency:
+  group: translate-cutroom
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/checkout@v4
+        with:
+          repository: kelvin-KangPD/cutroom-notes
+          token: ${{ secrets.CUTROOM_PUSH_TOKEN }}
+          path: cutroom
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml markdown
+
+      - name: 번역
+        id: translate
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          EVENT: ${{ github.event_name }}
+          SLUG: ${{ inputs.slug }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          set -o pipefail
+          if [ "$EVENT" = "push" ]; then
+            if [ -z "${BEFORE//0/}" ]; then
+              files=""
+            else
+              files=$(git diff --name-only --diff-filter=AM "$BEFORE" "$AFTER" -- 'content/posts/*.md')
+            fi
+            if [ -z "$files" ]; then echo "번역할 글 없음"; exit 0; fi
+            echo "$files"
+            python tools/translate_cutroom.py --out cutroom --files $files
+          elif [ -n "$SLUG" ]; then
+            python tools/translate_cutroom.py --out cutroom --slug "$SLUG"
+          else
+            python tools/translate_cutroom.py --out cutroom --missing
+          fi
+
+      - name: 사이트 빌드
+        if: ${{ !cancelled() }}
+        working-directory: cutroom
+        run: python build.py
+
+      - name: 변경 요약
+        if: ${{ !cancelled() }}
+        working-directory: cutroom
+        run: git status --short | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: 결과 보관 (dry run)
+        if: ${{ !cancelled() && inputs.dry_run }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cutroom-dry-run
+          path: cutroom/content
+
+      - name: cutroom-notes 에 커밋
+        if: ${{ !cancelled() && !inputs.dry_run }}
+        working-directory: cutroom
+        run: |
+          git config user.name "kelvin-KangPD"
+          git config user.email "kelvin96103@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then echo "바뀐 것 없음"; exit 0; fi
+          git commit -m "다국어 자동 반영: ${AFTER_SHORT:0:7} 번역 ($(git diff --cached --name-only -- content | wc -l)개 파일)"
+          git pull --rebase origin "$(git rev-parse --abbrev-ref HEAD)"
+          git push
+        env:
+          AFTER_SHORT: ${{ github.sha }}
