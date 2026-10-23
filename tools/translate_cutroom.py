@@ -109,7 +109,7 @@ def translate(meta, body, lang, key):
             if not out["title"].strip():
                 raise ValueError("제목 비어 있음")
             return out
-        except (urllib.error.URLError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as e:
+        except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as e:  # OSError: 연결 끊김·타임아웃·URLError
             last = e
             if isinstance(e, urllib.error.HTTPError) and e.code not in (429, 500, 502, 503, 504):
                 raise
