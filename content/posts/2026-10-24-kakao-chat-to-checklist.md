@@ -5,7 +5,7 @@ category: 작업기록
 tags: [AI, 자동화]
 series: wedding-ai
 part: 2
-cover: /images/20261024-kakao-checklist/01-카톡-대화-내보내기.webp
+cover: /images/20261024-kakao-checklist/02-체크리스트-남은-일.webp
 summary: 결혼 준비하며 아내와 나눈 카톡 대화를 통째로 내보내 클로드에게 넘기고, 한 일과 안 한 일을 나눈 체크리스트를 웹에서 같이 체크하는 페이지로 만들었다.
 ---
 

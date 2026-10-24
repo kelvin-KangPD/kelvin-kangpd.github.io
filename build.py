@@ -190,19 +190,17 @@ def fmt(d):
     return f"{d.year}. {d.month}. {d.day}."
 
 
+def tile(p, wide=False):
+    img = (f'<img class="cover" loading="lazy" alt="" src="{p["cover"]}">' if p["cover"]
+           else (f'<img class="cover" loading="lazy" alt="" src="https://i.ytimg.com/vi/{yt_id(p["youtube"])}/hqdefault.jpg">'
+                 if p["youtube"] else '<div class="ph"></div>'))
+    return (f'<article class="tile"><a href="{p["url"]}">{img}'
+            f'<div class="label">{p["category"]}</div><h3>{html.escape(p["title"])}</h3>'
+            f'<div class="date">{fmt(p["date"])}</div><p>{html.escape(p["summary"])}</p></a></article>')
+
+
 def card(p):
-    cslug = CAT_SLUG.get(p["category"], "thoughts")
-    thumb = ""
-    if p["cover"]:
-        thumb = f'<img class="thumb wide" loading="lazy" alt="" src="{p["cover"]}">'
-    elif p["youtube"]:
-        thumb = (f'<img class="thumb" loading="lazy" alt="" '
-                 f'src="https://i.ytimg.com/vi/{yt_id(p["youtube"])}/hqdefault.jpg">')
-    return (f'<article class="card{" has-thumb" if thumb else ""}">'
-            f'<a href="{p["url"]}" class="card-link">'
-            f'<div class="card-text"><div class="meta"><span class="cat c-{cslug}">{p["category"]}</span>'
-            f'<time>{fmt(p["date"])}</time></div>'
-            f'<h2>{html.escape(p["title"])}</h2><p>{html.escape(p["summary"])}</p></div>{thumb}</a></article>')
+    return tile(p)
 
 
 def listing(posts, heading=None, sub=None):
@@ -213,7 +211,32 @@ def listing(posts, heading=None, sub=None):
         head += "</header>"
     if not posts:
         return head + '<p class="empty">아직 글이 없어요.</p>'
-    return head + '<div class="list">' + "".join(card(p) for p in posts) + "</div>"
+    return head + '<div class="grid three">' + "".join(tile(p) for p in posts) + "</div>"
+
+
+def home(posts):
+    if not posts:
+        return '<p class="empty">아직 글이 없어요.</p>'
+    hero, rest = posts[0], posts[1:5]
+    himg = (f'<img class="cover" alt="" src="{hero["cover"]}">' if hero["cover"] else '<div class="ph"></div>')
+    top = (f'<section class="home-top"><div class="hero"><a href="{hero["url"]}">{himg}'
+           f'<div class="label">{hero["category"]}</div><h2>{html.escape(hero["title"])}</h2>'
+           f'<p>{html.escape(hero["summary"])}</p><div class="date">{fmt(hero["date"])}</div></a></div>')
+    items = ""
+    for p in rest:
+        t = f'<img class="thumb" loading="lazy" alt="" src="{p["cover"]}">' if p["cover"] else ""
+        items += (f'<a href="{p["url"]}"><div><h3>{html.escape(p["title"])}</h3>'
+                  f'<div class="date">{fmt(p["date"])}</div></div>{t}</a>')
+    top += f'<aside class="latest"><div class="latest-head">LATEST</div>{items}</aside></section>'
+    secs = ""
+    for name, slug in CATEGORIES:
+        sel = [p for p in posts if p["category"] == name]
+        if not sel:
+            continue
+        secs += (f'<section class="section"><div class="section-head"><h2>{name}</h2>'
+                 f'<a href="/category/{slug}/">전체 보기 »</a></div><div class="grid">'
+                 + "".join(tile(p) for p in sel[:4]) + "</div></section>")
+    return top + secs
 
 
 def write(rel, content):
@@ -259,7 +282,7 @@ def main():
             t.unlink()
     posts = load_posts()
     USED_CATS.update(p["category"] for p in posts)
-    write("index.html", page(SITE["title"], listing(posts), "all"))
+    write("index.html", page(SITE["title"], home(posts), "all"))
     chrono = posts[::-1]  # 이전/다음 글은 오래된 순으로 이어지게
     for i, p in enumerate(chrono):
         prev = chrono[i - 1] if i > 0 else None
