@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>키보드 기판 셀프 수리 가이드, 핫스왑 키 안 먹을 때부터 독거미 구리 패드 납땜까지 · 강PD 로그</title>
+<meta name="description" content="핫스왑 키보드에서 특정 키가 안 먹을 때 증상별로 어디부터 보면 되는지, 독거미 F108을 직접 고치며 확인한 순서대로 정리했다.">
+<meta name="naver-site-verification" content="08126fe2f9fece07e9a7d4ce506ffe5ac34effa9">
+<meta name="google-site-verification" content="DGgQ1KaoMWEGQy5mMYvWlhL2FhlGd11kbwJkMVg-3lE">
+<meta property="og:title" content="키보드 기판 셀프 수리 가이드, 핫스왑 키 안 먹을 때부터 독거미 구리 패드 납땜까지 · 강PD 로그">
+<meta property="og:description" content="핫스왑 키보드에서 특정 키가 안 먹을 때 증상별로 어디부터 보면 되는지, 독거미 F108을 직접 고치며 확인한 순서대로 정리했다.">
+<meta property="og:image" content="https://kelvin-kangpd.github.io/images/20261102-aula-f108-keyboard-repair/12-뜯긴-패드-자리.webp">
+<link rel="alternate" type="application/rss+xml" title="강PD 로그" href="/feed.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23111111'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>강</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">강PD 로그</a>
+    <nav class="cats"><a href="/">전체</a><a href="/category/work/" class="on">작업기록</a><a href="/category/thoughts/">생각</a><a href="/series/">시리즈</a></nav>
+  </div>
+</header>
+<main class="wrap">
+<article class="post"><header><a class="cat c-work" href="/category/work/">작업기록</a><h1>키보드 기판 셀프 수리 가이드, 핫스왑 키 안 먹을 때부터 독거미 구리 패드 납땜까지</h1><time>2026. 11. 3.</time></header><div class="prose"><!-- 사진: 트리 아래 없음 / 2 분해 → 지렛대, 배터리 / 3 소켓 → 튀어나온 소켓, 움짤1(틀린 납땜), 떨어진 소켓 / 4 패드 → 뜯긴 패드 자리 / 5 쇼트 → 움짤2, 짝 지도, 두 줄 원리, 이쑤시개 / 6 우회 → 연결 후보, 랜선, 움짤3, D63 / 7 결과 → 움짤4. 모두 aula-f108-keyboard-repair 폴더 재사용 -->
+
+<p>핫스왑 키보드에서 특정 키가 안 먹을 때, 아래 증상 중 내 경우를 찾아 해당 번호로 바로 가면 된다.</p>
+<pre><code>특정 키가 안 눌린다
+├ 스위치 바꾸니 됨 → 끝
+└ 바꿔도 안 됨 → 2번
+   ├ 소켓이 들떠 있음 → 3번
+   │  └ 패드가 갈색 → 4번
+   ├ 두 키가 같이 눌림 → 5번
+   └ 패드가 없음 → 6번
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>지금 내 상태</th>
+<th>바로 가기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>어떤 증상인지부터 헷갈린다</td>
+<td><a href="#s1">1. 증상으로 먼저 가르기</a></td>
+</tr>
+<tr>
+<td>스위치를 바꿔도 안 된다</td>
+<td><a href="#s2">2. 스위치 탓인지 거르고 하판 열기</a></td>
+</tr>
+<tr>
+<td>뒷면을 보니 소켓이 들떠 있다</td>
+<td><a href="#s3">3. 들뜬 소켓 다시 납땜하기</a></td>
+</tr>
+<tr>
+<td>소켓 자리가 갈색이다</td>
+<td><a href="#s4">4. 구리 패드가 뜯겼는지 확인하기</a></td>
+</tr>
+<tr>
+<td>두 키가 같이 눌린다</td>
+<td><a href="#s5">5. 두 키가 같이 눌리면 라인 쇼트</a></td>
+</tr>
+<tr>
+<td>패드가 없어 소켓을 붙일 데가 없다</td>
+<td><a href="#s6">6. 패드가 없으면 전선으로 우회하기</a></td>
+</tr>
+<tr>
+<td>고쳤는데 뭔가 남았다</td>
+<td><a href="#s7">7. 고친 뒤에 남는 것</a></td>
+</tr>
+</tbody>
+</table>
+<p>이 순서는 독거미 AULA F108 프로의 X키를 직접 고치며 실제로 거친 길이다. 납땜은 처음이었고 멀티미터는 없었다. 어떻게 여기까지 왔는지는 <a href="/posts/aula-f108-keyboard-repair/">셀프 수리기</a>에 따로 썼다.</p>
+<table>
+<thead>
+<tr>
+<th>준비물</th>
+<th>내가 쓴 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>인두기·실납</td>
+<td>다이소에서 산 것</td>
+</tr>
+<tr>
+<td>하판 여는 도구</td>
+<td>딱딱한 아무거나</td>
+</tr>
+<tr>
+<td>쇼트 찾는 도구</td>
+<td>이쑤시개, 키보드 테스트 사이트</td>
+</tr>
+<tr>
+<td>우회용 전선</td>
+<td>랜선에서 뽑은 한 가닥</td>
+</tr>
+<tr>
+<td>예비 소켓</td>
+<td>안 쓰는 키 자리에서 떼어 온 것</td>
+</tr>
+<tr>
+<td>멀티미터</td>
+<td>없어도 됐다</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s1">1. 증상으로 먼저 가르기</h2>
+<p>증상마다 원인과 고치는 곳이 다르다. 내가 실제로 본 증상을 기준으로 나누면 이렇다.</p>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>의심할 곳</th>
+<th>갈 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>한 키만 안 눌림, 다른 스위치로 바꾸면 됨</td>
+<td>스위치</td>
+<td>끝</td>
+</tr>
+<tr>
+<td>한 키만 안 눌림, 스위치를 바꿔도 그대로</td>
+<td>기판의 핫스왑 소켓</td>
+<td>2 → 3</td>
+</tr>
+<tr>
+<td>소켓 한쪽이 기판에서 튀어나와 있음</td>
+<td>소켓 납땜 또는 구리 패드</td>
+<td>3 → 4</td>
+</tr>
+<tr>
+<td>납땜한 뒤로 엉뚱한 키 두 개가 같이 눌림</td>
+<td>라인 쇼트</td>
+<td>5</td>
+</tr>
+<tr>
+<td>소켓 자리 패드가 갈색으로 비어 있음</td>
+<td>구리 패드 뜯김</td>
+<td>4 → 6</td>
+</tr>
+</tbody>
+</table>
+<p>명칭도 먼저 정리해 둔다. 스위치를 꽂는 검은 부품이 핫스왑 소켓이고, 그 소켓 다리가 붙는 은색 판이 구리 패드다. 다이오드는 소켓 옆에 붙은 작은 부품으로 따로 있다.</p>
+<h2 id="s2">2. 스위치 탓인지 거르고 하판 열기</h2>
+<p>처음 할 일은 안 눌리는 자리에 다른 스위치를 꽂아 보는 것이다. 나는 시끄러워서 축을 피치축으로 전부 갈아 끼운 뒤 X가 안 눌렸다. 다른 스위치로 바꿔 꽂아도 그대로였고, 그때부터 기판 쪽 문제로 봤다.</p>
+<p>하판은 생각보다 쉽게 열린다.</p>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>하판 고정 홈 주위 키캡만 뽑는다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>딱딱한 도구를 홈에 넣고 지렛대처럼 툭 젖힌다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>필요한 부분만 살살 뜯어 분리한다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>열자마자 배터리 연결부터 뺀다</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="딱딱한 도구를 홈에 넣어 하판을 젖히는 장면" src="/images/20261102-aula-f108-keyboard-repair/06-지렛대로-하판-열기.webp" />
+<small>홈에 도구를 넣고 지렛대처럼 젖혀 여는 하판</small></p>
+<p>배터리를 꼭 빼야 한다는 건 <a href="https://blog.naver.com/ststeel/224044004123">독거미 F99 수리 글</a>에서 배웠다. 무선 키보드라면 이것부터 한다.</p>
+<p><img alt="처음 열어 본 키보드 안쪽. 폼과 배선, 배터리 선이 보인다" src="/images/20261102-aula-f108-keyboard-repair/07-첫-오픈-배터리.webp" />
+<small>하판을 처음 열었을 때 보이는 배터리 선</small></p>
+<h2 id="s3">3. 들뜬 소켓 다시 납땜하기</h2>
+<p>안 눌리는 키 뒷면을 보고 소켓 한쪽이 살짝 튀어나와 있으면 여기다. 납이 들떠서 다리가 패드에서 떨어진 경우라면 다시 납땜하면 된다.</p>
+<p><img alt="X 자리 소켓이 기판에서 살짝 들떠 튀어나와 있다" src="/images/20261102-aula-f108-keyboard-repair/09-튀어나온-소켓.webp" />
+<small>기판에서 한쪽이 들뜬 X 자리 핫스왑 소켓</small></p>
+<p>납땜 방법은 내가 처음에 틀렸다. 인두기로 납을 녹여 소켓 자리에 떨어뜨리기만 했는데, <strong>맞는 방법은 기판을 먼저 달구고 그 위에 납을 대어 누르는 것</strong>이다. 아래 움짤이 틀린 방법이다.</p>
+<p><img alt="인두기로 실납을 녹여 소켓 자리에 떨어뜨리는 1차 납땜 장면" src="/images/20261102-aula-f108-keyboard-repair/움짤1-첫-납땜.webp" />
+<small>기판을 달구지 않고 녹인 납만 떨어뜨리는 틀린 방법</small></p>
+<p>소켓이 아예 떨어졌으면 안 쓰는 키 자리에서 떼어 온다. 나는 F10에서 뗐는데 지나고 보니 Pause에서 뗄 걸 그랬다. 자주 안 쓰는 키를 고르면 된다.</p>
+<p><img alt="손바닥 위에 떨어진 검은 핫스왑 소켓 하나" src="/images/20261102-aula-f108-keyboard-repair/10-떨어진-소켓.webp" />
+<small>기판에서 떨어져 나온 핫스왑 소켓</small></p>
+<p>납땜하기 전에 4번을 꼭 먼저 본다. 들뜬 게 납이 아니라 패드였다면 다시 붙여도 안 되고, 오히려 일이 커진다.</p>
+<h2 id="s4">4. 구리 패드가 뜯겼는지 확인하기</h2>
+<p>소켓을 들어낸 자리의 패드 색을 본다. 다른 키 패드는 은색인데 그 자리만 갈색이면 패드가 뜯긴 것이다.</p>
+<p><img alt="X 자리 뒷면. 왼쪽 네모 패드 자리가 갈색으로 비어 있고 주변에 탄 자국이 있다" src="/images/20261102-aula-f108-keyboard-repair/12-뜯긴-패드-자리.webp" />
+<small>은색 패드 대신 갈색 바닥이 드러난 X 자리</small></p>
+<p>나는 커터칼로 살짝 긁어 봤는데 아무것도 안 나왔다. 그걸로 확정했다.</p>
+<table>
+<thead>
+<tr>
+<th>확인</th>
+<th>판단</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>패드가 은색이고 납만 떨어졌다</td>
+<td>3번으로 돌아가 다시 납땜</td>
+</tr>
+<tr>
+<td>패드 자리가 갈색이고 긁어도 금속이 안 나온다</td>
+<td>패드 뜯김. 6번</td>
+</tr>
+</tbody>
+</table>
+<p>구리 패드는 기판에 인쇄된 구리라서 다른 자리에서 떼어 붙일 수 없다. 떼어 올 수 있는 건 소켓뿐이고, <strong>사라진 패드는 전선으로 대신 이어야 한다.</strong></p>
+<h2 id="s5">5. 두 키가 같이 눌리면 라인 쇼트</h2>
+<p>납땜한 뒤로 엉뚱한 키 두 개가 짝지어 같이 눌리기 시작했다면 라인 쇼트다. 내 경우는 1차 납땜 직후에 이렇게 됐다.</p>
+<p><img alt="조립한 키보드의 X 주변 키를 누르자 메모장에 엉뚱한 글자가 찍히는 장면" src="/images/20261102-aula-f108-keyboard-repair/움짤2-첫-결과-메모장.webp" />
+<small>1차 납땜 뒤 메모장에서 키를 눌러 보는 장면</small></p>
+<table>
+<thead>
+<tr>
+<th>누른 키</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl 또는 Shift</td>
+<td>둘이 같이 눌림</td>
+</tr>
+<tr>
+<td>Alt</td>
+<td>Z와 같이 눌림</td>
+</tr>
+<tr>
+<td>스페이스</td>
+<td>B와 같이 눌림</td>
+</tr>
+<tr>
+<td>.</td>
+<td>Fn과 같이 눌림</td>
+</tr>
+<tr>
+<td>↑</td>
+<td>↓와 같이 눌림</td>
+</tr>
+<tr>
+<td>A·S·D·F·G, C·V·N·M</td>
+<td>각자 잘 눌림</td>
+</tr>
+</tbody>
+</table>
+<p>짝이 전부 Shift 줄 키 하나와 그 바로 아래 Ctrl 줄 키 하나였다. 키보드는 세로줄에 하나씩 신호를 주면서 가로줄을 읽는 구조라, 가로줄 두 개가 붙으면 같은 세로 자리의 위아래 키가 같이 찍힌다(<a href="https://develop-docs.qmk.fm/how_a_matrix_works">QMK 문서</a>). C·V·N·M이 멀쩡했던 건 아래 줄이 스페이스바라 짝이 없어서였다.</p>
+<p><img alt="기판 전체 사진 위에 같이 눌리는 키 짝을 주황 원과 빨간 선으로 표시했다" src="/images/20261102-aula-f108-keyboard-repair/13-같이-눌리는-짝.webp" />
+<small>같이 눌리는 키 짝을 기판 위에 표시한 지도</small></p>
+<p><img alt="기판 사진 위에 Shift 줄 선과 Ctrl 줄 선을 그리고 한 점에서 이어진 모습을 표시했다" src="/images/20261102-aula-f108-keyboard-repair/14-두-줄-쇼트-원리.webp" />
+<small>Shift 줄과 Ctrl 줄이 한 점에서 붙은 라인 쇼트 원리</small></p>
+<p>쇼트 자리를 찾는 방법은 멀티미터 없이도 된다.</p>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>키보드를 연결하고 키보드 테스트 사이트를 연다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>짝으로 같이 눌리는 키 하나(나는 Ctrl)를 누르고 있는다. 화면에 짝 키(Shift)도 같이 켜진다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>작업한 자리 주변을 이쑤시개로 여기저기 꾹꾹 누른다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>짝 키가 꺼지는 지점이 쇼트 자리다</td>
+</tr>
+</tbody>
+</table>
+<p>이쑤시개는 전기가 안 통해서 결과를 흐리지 않는다. 나는 누르다가 「툭」 소리가 나더니 Shift가 따로 놀기 시작했다. 들려 있던 구리 선 끝이 아래 줄 선에 닿아 있다가 떨어진 것으로 보인다.</p>
+<p><img alt="뜯긴 자리 주변을 확대한 사진에 이쑤시개로 누를 구역을 주황 원으로 표시했다" src="/images/20261102-aula-f108-keyboard-repair/15-이쑤시개로-쇼트-찾기.webp" />
+<small>이쑤시개로 눌러 볼 구역을 표시한 사진</small></p>
+<p>쇼트를 잡기 전에 해 봤지만 소용없었던 것도 남긴다. 같은 증상이면 이건 건너뛰어도 된다.</p>
+<table>
+<thead>
+<tr>
+<th>해 본 것</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기판 위 쇳조각 핀셋으로 제거</td>
+<td>그대로</td>
+</tr>
+<tr>
+<td>탄 플럭스 자국 닦기</td>
+<td>그대로</td>
+</tr>
+<tr>
+<td>납 뭉침 정리</td>
+<td>옆 선에 안 닿아 있어 의미 없음</td>
+</tr>
+<tr>
+<td>안 눌리는 키의 스위치 뽑고 테스트</td>
+<td>그대로</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s6">6. 패드가 없으면 전선으로 우회하기</h2>
+<p>패드가 뜯긴 쪽 소켓 다리를 원래 가야 할 선에 전선으로 직접 잇는다. 어디에 이어야 하는지는 납땜하기 전에 전선을 손으로 대 보며 찾는다. 이 방법은 <a href="https://www.keebtalk.com/t/need-help-fixing-lifted-pads-hotswap-socket/20075">KeebTalk 수리 사례</a>에서 가져왔다.</p>
+<p><strong>제일 중요한 건 스위치를 꽂아 누른 채로 전선을 대는 것이다.</strong> 소켓 두 다리는 스위치가 눌려야만 이어진다. 나는 처음에 스위치 없이 대 보다가 X만 계속 안 찍혀서 한참 헤맸다.</p>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>소켓을 붙일 수 있는 쪽 다리는 납땜해 둔다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>뜯긴 쪽 다리에 전선 한쪽 끝을 납땜한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>스위치를 꽂고 그 키를 누른 채로 전선 다른 끝을 후보 패드에 하나씩 대 본다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>테스트 화면에 그 키가 찍히는 패드를 찾는다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>찾은 패드에 전선을 납땜한다</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="X 자리 주변 사진에 고정점과 대 볼 후보 ①~⑦을 원으로 표시했다" src="/images/20261102-aula-f108-keyboard-repair/16-X-연결-후보.webp" />
+<small>전선을 대 볼 후보 패드 일곱 군데</small></p>
+<p>전선은 랜선에서 한 가닥 뽑아 양 끝 피복을 벗겨 썼다. 가늘어서 패드 사이에 대기 좋았다.</p>
+<p><img alt="랜선에서 뽑아 피복을 벗긴 가는 전선" src="/images/20261102-aula-f108-keyboard-repair/17-랜선-전선.webp" />
+<small>랜선에서 뽑아 양 끝을 벗긴 전선 한 가닥</small></p>
+<p>대 보면 결과가 바로 나온다. 내 경우 위쪽 D49, D48 패드에 대면 D가 찍혔다. 뜯긴 쪽 다리가 이미 D와 같은 선에 이어져 있다는 뜻이었다. 바로 옆 D63 패드에 대자 X가 떴다. 예상했던 S도, 그다음 후보 D도 아니었다. 그래서 <strong>후보는 추측하지 말고 전부 대 보는 게 빠르다.</strong></p>
+<p><img alt="X 소켓 왼다리에 납땜한 전선을 옆 기판 패드에 대고 납땜하는 장면" src="/images/20261102-aula-f108-keyboard-repair/움짤3-전선-납땜.webp" />
+<small>소켓 다리에 단 전선을 옆 패드에 대고 땜질하는 모습</small></p>
+<p><img alt="D63 패드와 X 소켓 다리를 잇는 경로를 파란 선으로 표시했다" src="/images/20261102-aula-f108-keyboard-repair/18-D63-연결.webp" />
+<small>X 소켓 다리와 D63 패드를 이은 최종 경로</small></p>
+<p>이은 뒤에는 안 누를 때 조용하고 누를 때만 한 번 찍히는지 본다.</p>
+<p><img alt="키보드 테스트 사이트에서 X 키가 입력된 것으로 표시되는 화면" src="/images/20261102-aula-f108-keyboard-repair/움짤4-X-테스트-완료.webp" />
+<small>키보드 테스트 사이트에서 확인한 수리 뒤 X 입력</small></p>
+<h2 id="s7">7. 고친 뒤에 남는 것</h2>
+<p>전선 우회로 살린 키는 원래와 완전히 같지는 않다. 내 경우 남은 건 이렇다.</p>
+<table>
+<thead>
+<tr>
+<th>남은 것</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X와 C 동시 입력</td>
+<td>안 됨. X가 C의 다이오드를 빌려 쓰는 구조라서. X 전용 다이오드 다리로 옮기면 고칠 수 있음</td>
+</tr>
+<tr>
+<td>소켓을 떼어 온 키(F10)</td>
+<td>비어 있음. 안 쓰는 키(Pause 등) 소켓을 옮기거나 키 설정으로 바꿀 수 있음</td>
+</tr>
+<tr>
+<td>우회한 소켓</td>
+<td>한쪽 패드가 없어 약함. 스위치를 뺄 때는 뒤에서 소켓을 받친다</td>
+</tr>
+</tbody>
+</table>
+<p>일상 타이핑에는 문제가 없어서 나는 그대로 조립했다.</p>
+<p>참고한 글</p>
+<table>
+<thead>
+<tr>
+<th>출처</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://blog.naver.com/ststeel/224044004123">독거미 키보드 AULA F99 키 입력 불량</a></td>
+<td>하판 분해, 배터리 분리</td>
+</tr>
+<tr>
+<td><a href="https://develop-docs.qmk.fm/how_a_matrix_works">QMK: How a Keyboard Matrix Works</a></td>
+<td>가로줄·세로줄 매트릭스와 다이오드 원리</td>
+</tr>
+<tr>
+<td><a href="https://www.keebtalk.com/t/need-help-fixing-lifted-pads-hotswap-socket/20075">KeebTalk: Need help fixing lifted pads Hotswap socket</a></td>
+<td>뜯긴 패드를 전선으로 우회하는 사례</td>
+</tr>
+</tbody>
+</table></div><footer><a class="tag" href="/tag/키보드/">#키보드</a><a class="tag" href="/tag/납땜/">#납땜</a></footer></article><nav class="pager"><span></span><a href="/posts/aula-f108-keyboard-repair/" class="r"><span>이전 글</span>독거미 키보드 X키 안 눌림, 클로드와 추측을 하나씩 지워 가며 뜯긴 패드까지 살린 셀프 수리기</a></nav>
+</main>
+<footer class="site">
+  <div class="wrap">© 2026 강준구 · <a href="/feed.xml">RSS</a></div>
+</footer>
+</body>
+</html>
