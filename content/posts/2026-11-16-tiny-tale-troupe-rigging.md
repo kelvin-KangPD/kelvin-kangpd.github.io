@@ -74,6 +74,9 @@ cover: /images/20261114-tiny-tale-troupe-rigging/07-완성-장면.webp
 | 고개·몸 | no·not에서는 고개를 젓고 몸을 뒤로, 물음표에서는 갸웃 |
 | 팔 | this·mine·you 같은 말에서 상대 쪽 팔로 가리키고, 느낌표에서는 크게 든다 |
 
+![에펙 리깅 컴프 타임라인. 레이어마다 상위 링크에 ROOT 또는 HEAD가 걸려 있다](/images/20261114-tiny-tale-troupe-rigging/09-에펙-리깅-타임라인.webp)
+<small>에펙 타임라인. 팔·입·눈·머리 레이어가 HEAD와 ROOT에 부모로 연결돼 있다</small>
+
 ![할머니와 청년 두 캐릭터가 대사 시간대별로 표정과 팔 동작이 바뀌는 일곱 칸 요약판](/images/20261114-tiny-tale-troupe-rigging/06-대사-요약판.webp)
 <small>대사 한 줄을 일곱 순간으로 잘라 본 것. 눈을 감았다 뜨고, 입이 바뀌고, 가리키는 말에서 팔이 나간다</small>
 
