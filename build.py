@@ -7,7 +7,7 @@ content/posts/*.md 를 읽어서 저장소 루트에 HTML을 만든다.
 ---
 title: 글 제목
 date: 2026-10-19
-category: 작업기록   # 작업기록 / 생각 / 일상 / 숏츠
+category: 작업기록   # 작업기록 / 생각 / 일상 / 숏츠 / 내돈내산
 tags: [프리미어, 자막]
 summary: 목록에 보일 한 줄 요약 (생략하면 본문 앞부분 사용)
 youtube: 영상ID 또는 유튜브 주소 (숏츠 글이면 넣기)
@@ -53,6 +53,7 @@ CATEGORIES = [
     ("생각", "thoughts"),
     ("일상", "daily"),
     ("숏츠", "shorts"),
+    ("내돈내산", "review"),
 ]
 CAT_SLUG = dict(CATEGORIES)
 USED_CATS = set()  # 글이 1편 이상 있는 카테고리. 메뉴에는 이것만 보인다
@@ -305,7 +306,7 @@ def main():
                    f'<p>{html.escape(info.get("desc", ""))}</p></div></a></article>')
     if SERIES:
         write("series/index.html", page("시리즈", '<header class="list-head"><h1>시리즈</h1><p>여러 편에 걸쳐 이어지는 글</p></header><div class="list">' + sitems + "</div>", "series"))
-    subs = {"작업기록": "만들면서 배운 것들", "생각": "머릿속을 꺼내 정리해둔 것", "일상": "평범한 날의 기록", "숏츠": "짧게 찍고 짧게 남긴 영상"}
+    subs = {"작업기록": "만들면서 배운 것들", "생각": "머릿속을 꺼내 정리해둔 것", "일상": "평범한 날의 기록", "숏츠": "짧게 찍고 짧게 남긴 영상", "내돈내산": "내 돈 주고 사서 써 본 물건"}
     for name, slug in CATEGORIES:
         sel = [p for p in posts if p["category"] == name]
         write(f"category/{slug}/index.html", page(name, listing(sel, name, subs.get(name)), name))
